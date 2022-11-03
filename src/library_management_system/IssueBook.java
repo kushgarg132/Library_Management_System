@@ -2,12 +2,17 @@ package library_management_system;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.text.SimpleDateFormat;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import java.text.SimpleDateFormat;  
 import java.util.Date;
 
 public class IssueBook extends javax.swing.JFrame {
 
-static Connection c;
+    static Connection c;
     static String ISBN;
     Student s;
     
@@ -22,7 +27,7 @@ static Connection c;
         jLabel20.setText( new SimpleDateFormat("dd / MM / yyyy").format(new Date()) );
         
         try{
-            Class.forName("com.mysql.cj.jdbc.Driver");	   
+            Class.forName("com.mysql.cj.jdbc.Driver");     
             c = DriverManager.getConnection("jdbc:mysql://localhost/library_management", "root", mysql_setup.mysql_password);
         }
         catch(Exception e){
@@ -33,7 +38,7 @@ static Connection c;
     public IssueBook(Student s){
         this();
         this.s=s;
-    }    
+    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -223,16 +228,88 @@ static Connection c;
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-     
+        
+        if ( jTextField1.getText().isEmpty()){
+            JOptionPane.showMessageDialog(new JFrame(), "The fields cannot be left blank.", "Message" , JOptionPane.INFORMATION_MESSAGE);
+        }
+        else{
+            try{
+                String date = new SimpleDateFormat("yyMMdd").format(new Date());
+                int flag=1;
+                
+                Statement stmt = c.createStatement();
+                String query = "Select*from issue_book where ISBN='"+ISBN+"' and SID='"+s.sid+"';";
+                ResultSet rs=stmt.executeQuery(query);
+                
+                while(rs.next()){
+                    JOptionPane.showMessageDialog(new JFrame(), "You Already Issued this Book..", "Message" , JOptionPane.INFORMATION_MESSAGE);
+                    flag=0;
+                }
+                
+                if(flag==1){
+                    PreparedStatement ps = c.prepareStatement("insert into issue_book values(?,?,?); ");
+                    ps.setString(1, ISBN);
+                    ps.setString(2, s.sid);
+                    ps.setString(3, date);
+                    ps.execute();
+
+                    ps = c.prepareStatement("update Books set Quantity = Quantity-1 where ISBN = ?; ");
+                    ps.setString(1, ISBN);
+                    ps.execute();
+
+                    JOptionPane.showMessageDialog(new JFrame(), "Book Issued Successfully.", "Message" , JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+            catch(Exception e) { 
+                e.printStackTrace(); 
+                JOptionPane.showMessageDialog(new JFrame(), e.getMessage(), "Message" , JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
         
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        
+        StudentHome home = new StudentHome(s);
+        home.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         
+        if ( jTextField1.getText().isEmpty() ){
+            jLabel6.setText( "---" );
+            jLabel7.setText( "---" );
+            jLabel8.setText( "---" );
+            jLabel9.setText( "---" );
+            JOptionPane.showMessageDialog(new JFrame(), "The fields cannot be left blank.", "Message" , JOptionPane.INFORMATION_MESSAGE);
+        }
+        else{
+            
+            try{
+                int flag=1;
+                PreparedStatement ps = c.prepareStatement("select * from Books where ISBN = ? and Quantity>0; ");
+                ps.setString(1,jTextField1.getText());
+                ResultSet rs = ps.executeQuery();
+
+                while(rs.next()){
+                    ISBN = rs.getString("ISBN");
+                    jLabel6.setText( rs.getString("Title") );
+                    jLabel7.setText( rs.getString("Author") );
+                    jLabel8.setText( rs.getString("Price") );
+                    jLabel9.setText( rs.getString("Quantity") );
+                    flag=0;
+                }
+                if(flag==1){
+                    jLabel6.setText( "---" );
+                    jLabel7.setText( "---" );
+                    jLabel8.setText( "---" );
+                    jLabel9.setText( "---" );
+                    JOptionPane.showMessageDialog(new JFrame(), "Book Not Found in Database.", "Message" , JOptionPane.INFORMATION_MESSAGE);
+                    jTextField1.setText("");
+                }    
+            }
+            catch(Exception e) {e.printStackTrace();}
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
 

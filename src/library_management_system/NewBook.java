@@ -1,20 +1,28 @@
 package library_management_system;
 
+
+
+import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.Statement;
+import java.sql.ResultSet;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 public class NewBook extends javax.swing.JFrame {
 
+    static Connection con;
+    private String isbn;
     
     public NewBook() {
         initComponents();
         setTitle("Library Management System");
         setResizable(false);
         setLocationRelativeTo(null);
+        this.isbn="B101";
         
-         try{
-            Class.forName("com.mysql.cj.jdbc.Driver");	   
+        try{
+            Class.forName("com.mysql.cj.jdbc.Driver");     
             con = DriverManager.getConnection("jdbc:mysql://localhost/library_management", "root", mysql_setup.mysql_password);
             
             Statement stmt = con.createStatement();
@@ -30,8 +38,6 @@ public class NewBook extends javax.swing.JFrame {
         }
         jTextField1.setText(isbn);
         jTextField1.setEnabled(false);
-    }
-        
     }
 
     @SuppressWarnings("unchecked")
@@ -126,11 +132,34 @@ public class NewBook extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-       
+        
+        if ( jTextField1.getText().isEmpty() || jTextField2.getText().isEmpty() || jTextField3.getText().isEmpty() || jTextField4.getText().isEmpty() || jTextField5.getText().isEmpty() ){
+            JOptionPane.showMessageDialog(new JFrame(), "The fields cannot be left blank.", "Message" , JOptionPane.INFORMATION_MESSAGE);
+        }
+        else{
+            Books book=new Books();
+            
+            book.ISBN = jTextField1.getText();
+            book.Title = jTextField2.getText();
+            book.Author = jTextField3.getText();
+            book.Price = Integer.parseInt(jTextField4.getText());
+            book.Quantity = Integer.parseInt(jTextField5.getText());
+
+            book.save();
+            JOptionPane.showMessageDialog(new JFrame(), "Book Added Successfully !", "Message" , JOptionPane.INFORMATION_MESSAGE);
+
+            jTextField1.setText("B"+(Integer.parseInt(book.ISBN.substring(1))+1));
+            jTextField2.setText("");
+            jTextField3.setText("");
+            jTextField4.setText("");
+            jTextField5.setText("");
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-
+        AdminHome home = new AdminHome();
+        home.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField4ActionPerformed
