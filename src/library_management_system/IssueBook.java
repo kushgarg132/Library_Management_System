@@ -1,16 +1,39 @@
 package library_management_system;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class IssueBook extends javax.swing.JFrame {
 
+static Connection c;
+    static String ISBN;
+    Student s;
     
     public IssueBook() {
         initComponents();
         setTitle("Library Management System");
         setResizable(false);
         setLocationRelativeTo(null);
-       
+        
+        ISBN = "";
+        
+        jLabel20.setText( new SimpleDateFormat("dd / MM / yyyy").format(new Date()) );
+        
+        try{
+            Class.forName("com.mysql.cj.jdbc.Driver");	   
+            c = DriverManager.getConnection("jdbc:mysql://localhost/library_management", "root", mysql_setup.mysql_password);
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
     }
     
+    public IssueBook(Student s){
+        this();
+        this.s=s;
+    }    
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
