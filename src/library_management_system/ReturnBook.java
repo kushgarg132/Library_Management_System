@@ -1,5 +1,7 @@
 package library_management_system;
 
+import java.sql.DriverManager;
+
 
 public class ReturnBook extends javax.swing.JFrame {
 
@@ -10,6 +12,19 @@ public class ReturnBook extends javax.swing.JFrame {
         setTitle("Library Management System");
         setResizable(false);
         setLocationRelativeTo(null);   
+    }
+    
+    try{
+            Class.forName("com.mysql.cj.jdbc.Driver");	   
+            c = DriverManager.getConnection("jdbc:mysql://localhost/library_management", "root", mysql_setup.mysql_password);
+            statement = c.createStatement();
+        }
+        catch(Exception e){e.printStackTrace();}
+    }
+    
+    public ReturnBook(Student s){
+        this();
+        this.s=s;
     }
 
     @SuppressWarnings("unchecked")

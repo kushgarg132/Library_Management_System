@@ -1,5 +1,9 @@
 package library_management_system;
 
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
 public class NewBook extends javax.swing.JFrame {
 
     
@@ -8,6 +12,25 @@ public class NewBook extends javax.swing.JFrame {
         setTitle("Library Management System");
         setResizable(false);
         setLocationRelativeTo(null);
+        
+         try{
+            Class.forName("com.mysql.cj.jdbc.Driver");	   
+            con = DriverManager.getConnection("jdbc:mysql://localhost/library_management", "root", mysql_setup.mysql_password);
+            
+            Statement stmt = con.createStatement();
+            String query = "Select ISBN from Books order by ISBN desc limit 1";
+            ResultSet rs=stmt.executeQuery(query);
+            
+            if(rs.next()){
+                this.isbn = "B" +(Integer.parseInt(rs.getString("ISBN").substring(1))+1);
+            }
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        jTextField1.setText(isbn);
+        jTextField1.setEnabled(false);
+    }
         
     }
 
