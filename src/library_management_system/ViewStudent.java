@@ -1,5 +1,8 @@
 package library_management_system;
 
+
+import javax.swing.table.DefaultTableModel;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -19,6 +22,12 @@ public class ViewStudent extends javax.swing.JFrame {
         setTitle("Library Management System");
         setResizable(false);
         setLocationRelativeTo(null);
+        
+        Student student = new Student();
+        DefaultTableModel table=(DefaultTableModel)jTable1.getModel();
+        while(student.next()){
+            table.insertRow(table.getRowCount(), new Object[] { student.sid,student.name,student.batch,student.branch,student.email,student.mobile,student.getPassword()});
+        }
     }
 
     /**
@@ -102,7 +111,9 @@ public class ViewStudent extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-
+        AdminHome obj = new AdminHome();
+        obj.setVisible(true);
+        this.dispose();
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -131,6 +142,7 @@ public class ViewStudent extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(ViewStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */

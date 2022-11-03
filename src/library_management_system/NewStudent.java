@@ -1,19 +1,25 @@
 package library_management_system;
 
+import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.Statement;
+import java.sql.ResultSet;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 public class NewStudent extends javax.swing.JFrame {
 
+    static Connection con;
+    private String sid;
     
     public NewStudent() {
+        this.sid = "S101";
         initComponents();
         setTitle("Library Management System");
         setResizable(false);
         setLocationRelativeTo(null);
         
-         try{
+        try{
             Class.forName("com.mysql.cj.jdbc.Driver");	   
             con = DriverManager.getConnection("jdbc:mysql://localhost/library_management", "root", mysql_setup.mysql_password);
             
@@ -29,7 +35,6 @@ public class NewStudent extends javax.swing.JFrame {
         
         jTextField1.setText(sid);
         jTextField1.setEnabled(false);
-    }
     }
 
     @SuppressWarnings("unchecked")
@@ -144,11 +149,39 @@ public class NewStudent extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
     
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-
+    AdminHome home = new AdminHome();
+    home.setVisible(true);
+    this.dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-    
+    if (jTextField2.getText().isEmpty() || jTextField3.getText().isEmpty() || jTextField4.getText().isEmpty() ){
+        JOptionPane.showMessageDialog(new JFrame(), "The fields cannot be left blank.", "Message" , JOptionPane.INFORMATION_MESSAGE);
+    }
+    else{
+        Student s = new Student();
+
+        s.sid = jTextField1.getText();
+        s.name = jTextField2.getText();
+        s.batch = jComboBox1.getSelectedItem().toString();
+        s.branch = jTextField3.getText();
+        s.email = jTextField4.getText();
+        s.mobile = jTextField5.getText();
+        s.setPassword(new String(jPasswordField1.getPassword()));
+
+        s.save();
+        s.addUser();
+
+        JOptionPane.showMessageDialog(new JFrame(), "Student Added Successfully !", "Message" , JOptionPane.INFORMATION_MESSAGE);
+
+        jTextField1.setText("S"+(Integer.parseInt(s.sid.substring(1))+1));
+        jTextField2.setText("");
+        jComboBox1.setSelectedIndex(0);
+        jTextField3.setText("");
+        jTextField4.setText("");
+        jTextField5.setText("");
+        jPasswordField1.setText("");
+    }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jPasswordField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPasswordField1ActionPerformed

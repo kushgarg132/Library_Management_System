@@ -23,6 +23,16 @@ public class StudentHome extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }
     
+    public StudentHome(String id) {
+        this();
+        s=new Student(id);
+    }
+    
+    public StudentHome(Student s) {
+        this();
+        this.s=s;
+    }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -67,7 +77,7 @@ public class StudentHome extends javax.swing.JFrame {
         jLabel6.setText("Welcome");
         getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 10, 390, -1));
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(null));
+        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jTextField2.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
@@ -122,7 +132,7 @@ public class StudentHome extends javax.swing.JFrame {
         jTextField6.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         jPanel1.add(jTextField6, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 229, 197, -1));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, 371, 270));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 74, 371, 270));
 
         jPanel2.setForeground(new java.awt.Color(255, 255, 255));
         jPanel2.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -181,28 +191,50 @@ public class StudentHome extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-
+        IssueBook book=new IssueBook(s);
+        book.setVisible(true);
+        this.dispose();
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        
+        ReturnBook book=new ReturnBook(s);
+        book.setVisible(true);
+        this.dispose();
 // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-
+        
+    jTextField1.setEditable(false);
+    jTextField2.setEditable(false);
+    jTextField3.setEditable(false);
+    jTextField4.setEditable(false);
+    jTextField5.setEditable(false);
+    jTextField6.setEditable(false);
+    
+    jLabel6.setText("Welcome, "+s.name);
+    jTextField1.setText(s.sid);
+    jTextField2.setText(s.name);
+    jTextField3.setText(s.batch);
+    jTextField4.setText(s.branch);
+    jTextField5.setText(s.email);
+    jTextField6.setText(s.mobile);
     
         // TODO add your handling code here:
     }//GEN-LAST:event_formWindowOpened
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-
+    Login obj=new Login();
+    obj.setVisible(true);
+    this.dispose();
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-
+        ViewBook book = new ViewBook(s);
+        book.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
@@ -230,6 +262,7 @@ public class StudentHome extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(StudentHome.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */

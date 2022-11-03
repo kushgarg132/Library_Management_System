@@ -25,9 +25,8 @@ public class Student {
     
     public Student()
     {
-        String mysql_password="kush";
         try {
-            con = DriverManager.getConnection("jdbc:mysql://localhost/library_management","root", mysql_password);
+            con = DriverManager.getConnection("jdbc:mysql://localhost/library_management","root", mysql_setup.mysql_password);
             statement = con.createStatement();
             String query="Select S.SID,S.Name,S.batch,S.Branch,S.Email,S.Mobile,L.Password from login_details L,Student S where L.Id=S.Sid";
             rst=statement.executeQuery(query);
@@ -76,6 +75,24 @@ public class Student {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
         }
+    }
+    
+    public boolean next(){
+        try {
+            if(rst.next()){
+                this.sid=rst.getString("S.SID");
+                this.name=rst.getString("S.Name");
+                this.batch=rst.getString("S.Batch");
+                this.branch=rst.getString("S.Branch");
+                this.email=rst.getString("S.Email");
+                this.mobile=rst.getString("S.Mobile");
+                this.password=rst.getString("L.Password");
+                return true;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Books.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
     }
     
     public void setPassword(String s){

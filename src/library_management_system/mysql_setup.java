@@ -17,7 +17,7 @@ import javax.swing.JOptionPane;
  */
 public class mysql_setup {
     
-    static String mysql_password="1s2h3e4@5L6A";
+    static String mysql_password="kush";
     
     public static void main (String args[]){  
         

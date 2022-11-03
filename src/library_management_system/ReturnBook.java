@@ -1,20 +1,33 @@
 package library_management_system;
 
+import java.sql.Statement;
+import java.sql.Connection;
 import java.sql.DriverManager;
-
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import java.text.SimpleDateFormat;  
+import java.util.Date; 
+import javax.swing.table.DefaultTableModel;
 
 public class ReturnBook extends javax.swing.JFrame {
 
-    
+    static Connection c;
+    Statement statement;
+    static String ISBN;
+    static Student s;
     
     public ReturnBook() {
         initComponents();
         setTitle("Library Management System");
         setResizable(false);
-        setLocationRelativeTo(null);   
-    }
-    
-    try{
+        setLocationRelativeTo(null);
+        
+        jTextField1.setEditable(false);
+        jLabel20.setText( new SimpleDateFormat("dd / MM / yyyy").format(new Date()) );
+        
+        try{
             Class.forName("com.mysql.cj.jdbc.Driver");	   
             c = DriverManager.getConnection("jdbc:mysql://localhost/library_management", "root", mysql_setup.mysql_password);
             statement = c.createStatement();
@@ -60,10 +73,10 @@ public class ReturnBook extends javax.swing.JFrame {
         });
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, null, null, null, new java.awt.Font("Times New Roman", 1, 24))); // NOI18N
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "Return Book", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Times New Roman", 1, 24))); // NOI18N
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(null, null), null, null, null, new java.awt.Font("Tahoma", 0, 18))); // NOI18N
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2), "Book Details", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 18))); // NOI18N
 
         jLabel7.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         jLabel7.setText("---");
@@ -95,6 +108,11 @@ public class ReturnBook extends javax.swing.JFrame {
         jLabel1.setText("ISBN ");
 
         jTextField1.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField1ActionPerformed(evt);
+            }
+        });
 
         jLabel2.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         jLabel2.setText("Name");
@@ -204,6 +222,11 @@ public class ReturnBook extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jTable1MousePressed(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
 
         jPanel3.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(45, 31, -1, 131));
@@ -211,26 +234,131 @@ public class ReturnBook extends javax.swing.JFrame {
         getContentPane().add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(22, 21, 540, 510));
 
         jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/general_background.jpg"))); // NOI18N
-        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 590, 570));
+        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 610, 570));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-
+        
+        if ( jTextField1.getText().isEmpty()){
+            JOptionPane.showMessageDialog(new JFrame(), "The fields cannot be left blank.", "Message" , JOptionPane.INFORMATION_MESSAGE);
+        }
+        else{
+            
+            try{
+            
+                String date = new SimpleDateFormat("yyMMdd").format(new Date());
+                
+                PreparedStatement ps = c.prepareStatement("Insert into Record values(?,?,?,?);");
+                ps.setString(1, s.sid);
+                ps.setString(2, ISBN);
+                ps.setString(3, jLabel9.getText());
+                ps.setString(4, date);
+                
+                ps.execute();
+                
+                ps=c.prepareStatement("Delete from Issue_book where ISBN=? and SID=? and IssueDate=?;");
+                ps.setString(1, ISBN);
+                ps.setString(2, s.sid);
+                ps.setString(3, jLabel9.getText());
+                ps.execute();
+                
+                ps = c.prepareStatement("update Books set Quantity = Quantity+1 where ISBN = ?; ");
+                ps.setString(1, ISBN);
+                ps.execute();
+                
+                JOptionPane.showMessageDialog(new JFrame(), "Book Returned Successfully.", "Message" , JOptionPane.INFORMATION_MESSAGE); 
+            }
+            catch(Exception e) { 
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(new JFrame(), e.getMessage(), "Message" , JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-
+        
+        StudentHome home = new StudentHome(s);
+        home.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        
+        if ( jTextField1.getText().isEmpty() ){
+            jLabel6.setText( "---" );
+            jLabel7.setText( "---" );
+            jLabel8.setText( "---" );
+            jLabel9.setText( "---" );
+            JOptionPane.showMessageDialog(new JFrame(), "The fields cannot be left blank.", "Message" , JOptionPane.INFORMATION_MESSAGE);
+        }
+        else{
+            
+            try{
+                ResultSet rs;
+                PreparedStatement ps = c.prepareStatement("select b.ISBN,b.title,b.Author,b.Price,ib.IssueDate from Issue_book ib,Books b where b.ISBN=ib.ISBN and b.ISBN = ?; ");
+                ps.setString(1,jTextField1.getText());
+                rs = ps.executeQuery();
+                int flag=1;
 
+                while(rs.next()){
+                    ISBN = rs.getString("b.ISBN");
+                    jLabel6.setText( rs.getString("b.Title") );
+                    jLabel7.setText( rs.getString("b.Author") );
+                    jLabel8.setText( rs.getString("b.Price") );
+                    jLabel9.setText( rs.getString("ib.IssueDate") );
+                    flag=0;
+                }
+                
+                if(flag==1){
+                    jLabel6.setText( "---" );
+                    jLabel7.setText( "---" );
+                    jLabel8.setText( "---" );
+                    jLabel9.setText( "---" );
+                    JOptionPane.showMessageDialog(new JFrame(), "Book Not Found in Database.", "Message" , JOptionPane.INFORMATION_MESSAGE);
+                    jTextField1.setText("");
+                }
+           
+            } catch(Exception e) {e.printStackTrace();}
+           
+        }
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        DefaultTableModel table=(DefaultTableModel)jTable1.getModel();
+        
+        try{
+            String query="Select ib.ISBN,b.Title,b.Author,b.Price,ib.IssueDate from Issue_Book ib,Books b where ib.sid='"+s.sid+"' and ib.ISBN=b.ISBN;";
+            
+            ResultSet rs = statement.executeQuery(query);
+         
+            while(rs.next()){
+                String ISBN=rs.getString("ib.ISBN");
+                String Name=rs.getString("b.Title");
+                String Author=rs.getString("b.Author");
+                String Price=rs.getString("b.Price");
+                String Issue_date=rs.getString("ib.IssueDate");
+                
+                table.insertRow(table.getRowCount(), new Object[] {ISBN,Name,Author,Price,Issue_date});
+            }
+            
+            rs.close();
+        } catch(Exception e) {e.printStackTrace();}
         // TODO add your handling code here:
     }//GEN-LAST:event_formWindowOpened
+
+    private void jTable1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MousePressed
+        String bid = (String) jTable1.getValueAt(jTable1.getSelectedRow() ,0);
+        jTextField1.setText(bid);
+        jButton1.doClick();
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTable1MousePressed
+
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;

@@ -56,7 +56,7 @@ public class AdminHome extends javax.swing.JFrame {
         jLabel2.setText("Welcome Admin");
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 70, -1, -1));
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(null, null));
+        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 3));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jButton1.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
@@ -81,7 +81,7 @@ public class AdminHome extends javax.swing.JFrame {
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 140, 200, 190));
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(null, null));
+        jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 3));
         jPanel2.setLayout(null);
 
         jButton4.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
@@ -93,7 +93,7 @@ public class AdminHome extends javax.swing.JFrame {
             }
         });
         jPanel2.add(jButton4);
-        jButton4.setBounds(20, 30, 180, 55);
+        jButton4.setBounds(20, 30, 180, 54);
 
         jButton5.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/view_student.png"))); // NOI18N
@@ -104,11 +104,11 @@ public class AdminHome extends javax.swing.JFrame {
             }
         });
         jPanel2.add(jButton5);
-        jButton5.setBounds(20, 110, 180, 55);
+        jButton5.setBounds(20, 110, 180, 54);
 
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(243, 140, 210, 190));
 
-        jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(null, null));
+        jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 3));
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jButton3.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
