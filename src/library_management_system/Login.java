@@ -181,7 +181,52 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    String eid,pass;
+    int x = 0;
+    eid=jTextField1.getText();
+    pass=new String(jPasswordField1.getPassword());
+    String role;
     
+    if(jRadioButton1.isSelected())
+        role="admin";
+    else
+        role="student";
+    
+    
+    try{
+        Class.forName("java.sql.Driver");
+
+        Connection con=DriverManager.getConnection("jdbc:mysql://localhost/library_management","root",mysql_setup.mysql_password);
+
+            Statement stmt=con.createStatement();
+            String query="Select*from login_details where role='"+role+"' and Id='"+eid+"' and Password='"+pass+"';";
+            ResultSet rs=stmt.executeQuery(query);
+
+            if(rs.next()){
+                x=1;
+                if(role.equals("admin")){
+                    AdminHome ah=new AdminHome();
+                    ah.setVisible(true);
+                    dispose();
+                }
+                else if(role.equals("student")){
+                    StudentHome sh=new StudentHome(eid);
+                    sh.setVisible(true);
+                    dispose();
+                }
+            }
+            if(x==0)
+                JOptionPane.showMessageDialog(null,"Details are Invalid");
+
+            rs.close();
+            stmt.close();
+            con.close();
+
+        }
+        catch(Exception e){
+            JOptionPane.showMessageDialog(null,e);
+        }
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
