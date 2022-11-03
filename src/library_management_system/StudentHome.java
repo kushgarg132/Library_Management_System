@@ -67,7 +67,7 @@ public class StudentHome extends javax.swing.JFrame {
         jLabel6.setText("Welcome");
         getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 10, 390, -1));
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(null));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jTextField2.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
@@ -122,7 +122,7 @@ public class StudentHome extends javax.swing.JFrame {
         jTextField6.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         jPanel1.add(jTextField6, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 229, 197, -1));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 74, 371, 270));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, 371, 270));
 
         jPanel2.setForeground(new java.awt.Color(255, 255, 255));
         jPanel2.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
